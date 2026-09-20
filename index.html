@@ -1,133 +1,138 @@
-export default async function handler(req, res) {
-  try {
-    const url = new URL(req.url, "https://qidus-menged.vercel.app");
-    const q = (url.searchParams.get("q") || "").trim();
+<!DOCTYPE html>
+<html lang="am">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ቅዱስ መንገድ | Qidus Menged</title>
 
-    const safe = q.replace(/[\\"]/g, "\\$&");
+  <style>
+    *{box-sizing:border-box}
 
-    const query = `
-[out:json][timeout:25];
-(
-  node["amenity"="place_of_worship"]["religion"="christian"]["name"~"${safe}",i](3.4,33,15,48.5);
-  way["amenity"="place_of_worship"]["religion"="christian"]["name"~"${safe}",i](3.4,33,15,48.5);
-  relation["amenity"="place_of_worship"]["religion"="christian"]["name"~"${safe}",i](3.4,33,15,48.5);
-
-  node["historic"="monastery"]["name"~"${safe}",i](3.4,33,15,48.5);
-  way["historic"="monastery"]["name"~"${safe}",i](3.4,33,15,48.5);
-  relation["historic"="monastery"]["name"~"${safe}",i](3.4,33,15,48.5);
-);
-out center tags;
-`;
-
-    const response = await fetch(
-      "https://overpass-api.de/api/interpreter",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: new URLSearchParams({ data: query })
-      }
-    );
-
-    if (!response.ok) {
-      return res.status(502).json({
-        error: "የመረጃ አገልግሎቱ አልተገኘም።"
-      });
+    body{
+      margin:0;
+      font-family:Arial,"Noto Sans Ethiopic",sans-serif;
+      background:#f7f4ed;
+      color:#222;
     }
 
-    const data = await response.json();
+    header{
+      background:#5b3a20;
+      color:#fff;
+      padding:18px 20px;
+      position:sticky;
+      top:0;
+      z-index:10;
+      box-shadow:0 2px 8px #0002;
+    }
 
-    const results = (data.elements || []).map((item) => {
-      const t = item.tags || {};
+    .header{
+      max-width:1100px;
+      margin:auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:15px;
+    }
 
-      const lat =
-        item.lat ??
-        item.center?.lat ??
-        null;
+    .brand{
+      font-size:25px;
+      font-weight:bold;
+    }
 
-      const lon =
-        item.lon ??
-        item.center?.lon ??
-        null;
+    .brand small{
+      display:block;
+      font-size:12px;
+      opacity:.8;
+      margin-top:3px;
+    }
 
-      return {
-        id: `${item.type}-${item.id}`,
+    nav{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
 
-        name:
-          t.name ||
-          t["name:am"] ||
-          t["name:en"] ||
-          "ስም ያልተገለጸ",
+    button{
+      border:0;
+      border-radius:9px;
+      padding:10px 14px;
+      cursor:pointer;
+      font-size:14px;
+    }
 
-        nameAm: t["name:am"] || "",
-        nameEn: t["name:en"] || "",
+    nav button{
+      background:#ffffff18;
+      color:#fff;
+    }
 
-        type:
-          t.historic === "monastery"
-            ? "ገዳም"
-            : "አድባራት",
+    nav button:hover{
+      background:#ffffff30;
+    }
 
-        location:
-          t["addr:city"] ||
-          t["addr:town"] ||
-          t["addr:village"] ||
-          t["addr:district"] ||
-          "ኢትዮጵያ",
+    main{
+      max-width:1100px;
+      margin:auto;
+      padding:30px 18px 60px;
+    }
 
-        address:
-          [
-            t["addr:street"],
-            t["addr:place"],
-            t["addr:city"],
-            t["addr:state"]
-          ]
-            .filter(Boolean)
-            .join(", "),
+    .panel{
+      display:none;
+    }
 
-        description:
-          t.description ||
-          t["description:am"] ||
-          t["short_description"] ||
-          "",
+    .panel.active{
+      display:block;
+    }
 
-        phone:
-          t.phone ||
-          t["contact:phone"] ||
-          "",
+    .hero{
+      text-align:center;
+      padding:30px 10px;
+    }
 
-        website:
-          t.website ||
-          t["contact:website"] ||
-          "",
+    .hero h1{
+      margin:0 0 10px;
+      font-size:36px;
+      color:#5b3a20;
+    }
 
-        openingHours:
-          t.opening_hours ||
-          "",
+    .hero p{
+      color:#666;
+      margin-bottom:24px;
+    }
 
-        denomination:
-          t.denomination ||
-          "",
+    .search{
+      max-width:700px;
+      margin:auto;
+      display:flex;
+      gap:8px;
+    }
 
-        lat,
-        lon,
+    .search input{
+      flex:1;
+      padding:15px;
+      border:1px solid #ddd;
+      border-radius:10px;
+      font-size:16px;
+      outline:none;
+    }
 
-        mapUrl:
-          lat !== null && lon !== null
-            ? `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=18/${lat}/${lon}`
-            : ""
-      };
-    });
+    .search button{
+      background:#5b3a20;
+      color:#fff;
+      padding:0 22px;
+    }
 
-    return res.status(200).json({
-      query: q,
-      count: results.length,
-      results
-    });
+    .filters{
+      display:flex;
+      justify-content:center;
+      gap:8px;
+      margin:20px 0;
+      flex-wrap:wrap;
+    }
 
-  } catch (error) {
-    return res.status(500).json({
-      error: "ፍለጋው አልተሳካም።"
-    });
-  }
-}
+    .filter{
+      background:#fff;
+      border:1px solid #ddd;
+      color:#5b3a20;
+    }
+
+    .filter
