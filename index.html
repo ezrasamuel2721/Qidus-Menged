@@ -3,230 +3,308 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ቅዱስ መንገድ</title>
+<title>ቅዱስ መንገድ | Qidus Menged</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
 
 body{
   font-family:Arial,"Noto Sans Ethiopic",sans-serif;
-  background:#f4f7f5;
-  color:#1d2a22;
-  line-height:1.6;
+  background:#f5f7f9;
+  color:#222;
+  line-height:1.7;
 }
 
 header{
-  background:linear-gradient(135deg,#173f2b,#286044);
+  background:linear-gradient(135deg,#173f35,#276b55);
   color:white;
-  padding:25px 18px;
+  padding:22px 15px 30px;
   text-align:center;
 }
 
 .logo{
-  width:78px;
-  height:78px;
-  margin:0 auto 10px;
-  border-radius:50%;
-  background:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#1f5a3a;
-  font-size:32px;
+  font-size:30px;
   font-weight:bold;
 }
 
-header h1{font-size:30px}
-header p{opacity:.9;margin-top:4px}
+.subtitle{
+  margin-top:5px;
+  opacity:.9;
+}
+
+.search-area{
+  max-width:850px;
+  margin:22px auto 0;
+}
+
+.search-box{
+  display:flex;
+  background:white;
+  border-radius:14px;
+  padding:6px;
+  box-shadow:0 5px 20px rgba(0,0,0,.15);
+}
+
+.search-box input{
+  flex:1;
+  border:0;
+  outline:none;
+  padding:14px;
+  font-size:16px;
+  color:#222;
+}
+
+.search-box button{
+  border:0;
+  border-radius:10px;
+  padding:0 22px;
+  background:#d99b2b;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
 
 nav{
   background:white;
   display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:7px;
-  padding:12px;
+  gap:8px;
+  padding:10px;
+  overflow-x:auto;
   position:sticky;
   top:0;
-  z-index:20;
-  box-shadow:0 2px 10px #0001;
+  z-index:10;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
 }
 
 nav button{
   border:0;
-  background:#edf3ef;
-  color:#194a31;
+  background:#eef3f1;
+  color:#173f35;
   padding:10px 14px;
-  border-radius:8px;
-  cursor:pointer;
-  font-size:14px;
-}
-
-nav button:hover{background:#dcebe1}
-
-.hero{
-  max-width:1100px;
-  margin:22px auto;
-  padding:35px 18px;
-  text-align:center;
-  background:white;
-  border-radius:16px;
-  box-shadow:0 3px 15px #00000012;
-}
-
-.hero h2{
-  color:#194a31;
-  font-size:27px;
-  margin-bottom:8px;
-}
-
-.search{
-  max-width:760px;
-  margin:22px auto 0;
-  display:flex;
-  gap:8px;
-}
-
-.search input{
-  flex:1;
-  padding:14px;
-  border:1px solid #ccd7cf;
-  border-radius:9px;
-  font-size:16px;
-}
-
-.search button{
-  border:0;
-  background:#1e5a3a;
-  color:white;
-  padding:14px 22px;
-  border-radius:9px;
+  border-radius:20px;
+  white-space:nowrap;
   cursor:pointer;
 }
 
-.section{
+.container{
   max-width:1100px;
-  margin:25px auto;
-  padding:0 18px;
+  margin:auto;
+  padding:25px 15px 50px;
 }
 
 .section-title{
-  color:#194a31;
-  text-align:center;
-  margin-bottom:18px;
-  font-size:24px;
+  margin-bottom:15px;
+  color:#173f35;
 }
 
-.cards{
+.search-status{
+  background:white;
+  padding:15px;
+  border-radius:12px;
+  margin-bottom:18px;
+  box-shadow:0 2px 8px rgba(0,0,0,.06);
+}
+
+.results{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-  gap:16px;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:18px;
 }
 
 .card{
   background:white;
-  padding:20px;
-  border-radius:14px;
-  box-shadow:0 3px 12px #00000010;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 3px 12px rgba(0,0,0,.08);
+  transition:.2s;
 }
 
-.card h3{
-  color:#195336;
-  margin-bottom:7px;
+.card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 8px 22px rgba(0,0,0,.12);
 }
 
-.card p{
-  color:#59645e;
-  font-size:14px;
-}
-
-.card button{
+.card img{
   width:100%;
-  margin-top:14px;
-  border:0;
-  background:#1e5a3a;
-  color:white;
-  padding:11px;
-  border-radius:8px;
-  cursor:pointer;
+  height:190px;
+  object-fit:cover;
+  background:#ddd;
 }
 
-.icon{
-  font-size:34px;
+.card-content{
+  padding:17px;
+}
+
+.type{
+  display:inline-block;
+  background:#e9f3ee;
+  color:#176044;
+  border-radius:20px;
+  padding:4px 10px;
+  font-size:13px;
   margin-bottom:8px;
 }
 
-.place{
-  border-left:4px solid #2b704b;
+.card h3{
+  color:#173f35;
+  margin-bottom:5px;
 }
 
-.favorite{
-  background:#fff7df;
+.location{
+  color:#666;
+  font-size:14px;
+  margin-bottom:10px;
 }
 
-.map-box{
-  min-height:220px;
-  border-radius:14px;
-  background:
-    linear-gradient(#0001 1px,transparent 1px),
-    linear-gradient(90deg,#0001 1px,transparent 1px);
-  background-size:35px 35px;
-  background-color:#e8eee9;
+.description{
+  font-size:14px;
+  color:#555;
+}
+
+.actions{
   display:flex;
-  align-items:center;
-  justify-content:center;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:14px;
+}
+
+.actions button,
+.actions a{
+  border:0;
+  text-decoration:none;
+  background:#173f35;
+  color:white;
+  padding:8px 11px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:13px;
+}
+
+.actions .favorite{
+  background:#d99b2b;
+}
+
+.details{
+  display:none;
+  background:white;
+  padding:25px;
+  border-radius:16px;
+  margin-top:25px;
+  box-shadow:0 3px 15px rgba(0,0,0,.1);
+}
+
+.details img{
+  width:100%;
+  max-height:400px;
+  object-fit:cover;
+  border-radius:12px;
+  margin:15px 0;
+}
+
+.details h2{
+  color:#173f35;
+  margin-bottom:8px;
+}
+
+.detail-row{
+  margin:8px 0;
+}
+
+.detail-label{
+  font-weight:bold;
+  color:#173f35;
+}
+
+.close-btn{
+  float:right;
+  border:0;
+  background:#eee;
+  padding:7px 12px;
+  border-radius:7px;
+  cursor:pointer;
+}
+
+.empty{
   text-align:center;
-  color:#426050;
-  padding:20px;
+  background:white;
+  padding:35px 20px;
+  border-radius:15px;
+  color:#777;
 }
 
 .dashboard{
-  background:#173f2b;
-  color:white;
+  margin-top:30px;
+  background:white;
+  padding:22px;
   border-radius:16px;
-  padding:25px;
+  box-shadow:0 3px 12px rgba(0,0,0,.07);
 }
 
-.dashboard h2{
-  margin-bottom:12px;
-}
-
-.dashboard-grid{
+.form-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
   gap:12px;
+  margin-top:15px;
 }
 
-.dashboard-item{
-  background:#ffffff18;
-  padding:17px;
-  border-radius:10px;
-}
-
-.info{
-  display:none;
-  margin-top:12px;
-  background:#f0f5f1;
-  padding:12px;
+.form-grid input,
+.form-grid textarea,
+.form-grid select{
+  width:100%;
+  padding:11px;
+  border:1px solid #ddd;
   border-radius:8px;
+  font-size:14px;
+}
+
+.form-grid textarea{
+  min-height:100px;
+}
+
+.full{
+  grid-column:1/-1;
+}
+
+.add-btn{
+  margin-top:15px;
+  background:#173f35;
+  color:white;
+  border:0;
+  padding:12px 20px;
+  border-radius:9px;
+  cursor:pointer;
 }
 
 footer{
-  margin-top:45px;
-  background:#173f2b;
+  background:#173f35;
   color:white;
   text-align:center;
   padding:25px 15px;
+  margin-top:30px;
 }
 
-.hidden{display:none}
-
 @media(max-width:600px){
-  header h1{font-size:25px}
-  .hero h2{font-size:22px}
-  .search{flex-direction:column}
-  .search button{width:100%}
-  nav button{font-size:13px;padding:9px 11px}
+  .logo{
+    font-size:24px;
+  }
+
+  .search-box{
+    flex-direction:column;
+    gap:5px;
+  }
+
+  .search-box button{
+    padding:12px;
+  }
+
+  .card img{
+    height:170px;
+  }
 }
 </style>
 </head>
@@ -234,222 +312,36 @@ footer{
 <body>
 
 <header>
-  <div class="logo">✝</div>
-  <h1>ቅዱስ መንገድ</h1>
-  <p>የአድባራትና የገዳማት መረጃ መድረክ</p>
+
+  <div class="logo">✝ ቅዱስ መንገድ</div>
+
+  <div class="subtitle">
+    የገዳማትና የአድባራት መረጃ መፈለጊያ
+  </div>
+
+  <div class="search-area">
+
+    <div class="search-box">
+
+      <input
+        id="searchInput"
+        type="text"
+        placeholder="ገዳማትንና አድባራትን ፈልግ..."
+        onkeydown="if(event.key==='Enter') searchPlaces()"
+      >
+
+      <button onclick="searchPlaces()">
+        🔎 ፈልግ
+      </button>
+
+    </div>
+
+  </div>
+
 </header>
 
 <nav>
-  <button onclick="go('home')">መነሻ</button>
-  <button onclick="go('churches')">⛪ አድባራት</button>
-  <button onclick="go('monasteries')">🏛️ ገዳማት</button>
-  <button onclick="go('nearby')">📍 በአቅራቢያ</button>
-  <button onclick="go('map')">🗺️ ካርታ</button>
-  <button onclick="go('favorites')">❤️ ተወዳጆች</button>
-  <button onclick="go('dashboard')">⚙️ Dashboard</button>
-</nav>
-
-<main id="home">
-
-<section class="hero">
-  <h2>እንኳን ወደ ቅዱስ መንገድ በደህና መጡ</h2>
-  <p>
-    በአካባቢዎ ያሉ አድባራትና ገዳማትን ለማግኘት፣
-    መረጃቸውን ለማየት እና አቅጣጫ ለማግኘት የተዘጋጀ።
-  </p>
-
-  <div class="search">
-    <input id="searchInput"
-           type="search"
-           placeholder="የአድባራት ወይም የገዳማት ስም ይፈልጉ...">
-    <button onclick="searchPlaces()">🔎 ፈልግ</button>
-  </div>
-
-  <p id="searchResult" style="margin-top:12px;color:#1e5a3a;"></p>
-</section>
-
-<section class="section" id="churches">
-  <h2 class="section-title">⛪ አድባራት</h2>
-
-  <div class="cards">
-
-    <div class="card place">
-      <div class="icon">⛪</div>
-      <h3>አድባራት ፍለጋ</h3>
-      <p>በስም ወይም በአካባቢ የአድባራት መረጃ ለመፈለግ።</p>
-      <button onclick="showInfo('churchInfo')">ተጨማሪ መረጃ</button>
-      <div class="info" id="churchInfo">
-        የአድባራት ስም፣ አካባቢ፣ ፎቶ፣ ታሪክ እና የአቅጣጫ መረጃ እዚህ ሊታይ ይችላል።
-      </div>
-    </div>
-
-    <div class="card place">
-      <div class="icon">📍</div>
-      <h3>በአካባቢ ፈልግ</h3>
-      <p>በአካባቢዎ የሚገኙ አድባራትን ለማግኘት።</p>
-      <button onclick="useLocation()">የአሁኑን አካባቢ ተጠቀም</button>
-    </div>
-
-  </div>
-</section>
-
-<section class="section" id="monasteries">
-  <h2 class="section-title">🏛️ ገዳማት</h2>
-
-  <div class="cards">
-
-    <div class="card place">
-      <div class="icon">🏛️</div>
-      <h3>ገዳማት</h3>
-      <p>የገዳማትን ስም፣ አካባቢ፣ ታሪክ እና መረጃ ለማየት።</p>
-      <button onclick="showInfo('monasteryInfo')">ተጨማሪ መረጃ</button>
-      <div class="info" id="monasteryInfo">
-        የገዳማት መረጃ በዚህ ክፍል ይዘጋጃል።
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<section class="section" id="nearby">
-  <h2 class="section-title">📍 በአቅራቢያዎ</h2>
-
-  <div class="card">
-    <p id="locationText">
-      የአካባቢ መረጃ ለማግኘት ከታች ያለውን ቁልፍ ይጫኑ።
-    </p>
-    <button onclick="useLocation()">📍 አካባቢዬን ፈልግ</button>
-  </div>
-</section>
-
-<section class="section" id="map">
-  <h2 class="section-title">🗺️ ካርታ</h2>
-
-  <div class="map-box">
-    <div>
-      <div style="font-size:45px;">🗺️</div>
-      <h3>የቅዱስ መንገድ ካርታ</h3>
-      <p>የአድባራትና የገዳማት ቦታዎች በካርታ ላይ እንዲታዩ የተዘጋጀ ክፍል።</p>
-    </div>
-  </div>
-</section>
-
-<section class="section" id="favorites">
-  <h2 class="section-title">❤️ ተወዳጆች</h2>
-
-  <div class="card favorite">
-    <h3>የተወደዱ ቦታዎች</h3>
-    <p>
-      በኋላ በቀላሉ ለማግኘት የሚወዷቸውን
-      አድባራትና ገዳማት ማስቀመጥ ይችላሉ።
-    </p>
-    <button onclick="showInfo('favInfo')">ዝርዝር ክፈት</button>
-    <div class="info" id="favInfo">
-      እስካሁን የተቀመጡ ተወዳጆች የሉም።
-    </div>
-  </div>
-</section>
-
-<section class="section" id="dashboard">
-  <div class="dashboard">
-    <h2>⚙️ Dashboard</h2>
-    <p style="margin-bottom:18px;">
-      የቅዱስ መንገድ የመረጃ አስተዳደሪ ክፍል
-    </p>
-
-    <div class="dashboard-grid">
-
-      <div class="dashboard-item">
-        <h3>➕ አዲስ ቦታ</h3>
-        <p>አዲስ አድባራት ወይም ገዳማት መጨመር</p>
-      </div>
-
-      <div class="dashboard-item">
-        <h3>✏️ ማስተካከያ</h3>
-        <p>ያለውን መረጃ ማስተካከል</p>
-      </div>
-
-      <div class="dashboard-item">
-        <h3>📷 ፎቶ</h3>
-        <p>የቦታ ፎቶዎችን ማከል</p>
-      </div>
-
-      <div class="dashboard-item">
-        <h3>📍 GPS</h3>
-        <p>የቦታውን አቀማመጥ ማስገባት</p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-</main>
-
-<footer>
-  <h3>ቅዱስ መንገድ</h3>
-  <p>የአድባራትና የገዳማት መረጃ መድረክ</p>
-  <p style="margin-top:8px;font-size:13px;">© 2026 ቅዱስ መንገድ</p>
-</footer>
-
-<script>
-function go(id){
-  const element=document.getElementById(id);
-  if(element){
-    element.scrollIntoView({
-      behavior:"smooth",
-      block:"start"
-    });
-  }
-}
-
-function showInfo(id){
-  const element=document.getElementById(id);
-
-  if(element.style.display==="block"){
-    element.style.display="none";
-  }else{
-    element.style.display="block";
-  }
-}
-
-function searchPlaces(){
-  const input=document.getElementById("searchInput");
-  const result=document.getElementById("searchResult");
-  const value=input.value.trim();
-
-  if(!value){
-    result.textContent="እባክዎ የአድባራት ወይም የገዳማት ስም ያስገቡ።";
-    return;
-  }
-
-  result.textContent="“"+value+"” በመፈለግ ላይ ነው...";
-}
-
-function useLocation(){
-  const text=document.getElementById("locationText");
-
-  if(!navigator.geolocation){
-    text.textContent="ይህ መሣሪያ የGPS አገልግሎትን አይደግፍም።";
-    return;
-  }
-
-  text.textContent="አካባቢዎን በመፈለግ ላይ...";
-
-  navigator.geolocation.getCurrentPosition(
-    function(position){
-      text.textContent=
-        "አካባቢዎ ተገኝቷል። Latitude: "+
-        position.coords.latitude.toFixed(5)+
-        " | Longitude: "+
-        position.coords.longitude.toFixed(5);
-    },
-    function(){
-      text.textContent=
-        "የአካባቢ ፈቃድ አልተሰጠም። እባክዎ GPS/Location ፈቃድ ይፍቀዱ።";
-    }
-  );
-}
-</script>
-
-</body>
-</html>
+  <button onclick="showAll()">ሁሉንም አሳይ</button>
+  <button onclick="filterType('ገዳም')">ገዳማት</button>
+  <button onclick="filterType('አድባራት')">አድባራት</button>
+  <button onclick="show
