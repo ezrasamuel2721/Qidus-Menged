@@ -1,545 +1,133 @@
-<!DOCTYPE html>
-<html lang="am">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ቅዱስ መንገድ | Qidus Menged</title>
+export default async function handler(req, res) {
+  try {
+    const url = new URL(req.url, "https://qidus-menged.vercel.app");
+    const q = (url.searchParams.get("q") || "").trim();
 
-  <style>
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:Arial,"Noto Sans Ethiopic",sans-serif;
-      background:#f7f4ed;
-      color:#222;
-    }
-    header{
-      background:#5b3a20;
-      color:white;
-      padding:18px 20px;
-      position:sticky;
-      top:0;
-      z-index:10;
-      box-shadow:0 2px 8px #0002;
-    }
-    .header{
-      max-width:1100px;
-      margin:auto;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:15px;
-    }
-    .brand{
-      font-size:25px;
-      font-weight:bold;
-    }
-    .brand small{
-      display:block;
-      font-size:12px;
-      opacity:.8;
-      margin-top:3px;
-    }
-    nav{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-    }
-    button{
-      border:0;
-      border-radius:9px;
-      padding:10px 14px;
-      cursor:pointer;
-      font-size:14px;
-    }
-    nav button{
-      background:#ffffff18;
-      color:white;
-    }
-    nav button:hover{background:#ffffff30}
+    const safe = q.replace(/[\\"]/g, "\\$&");
 
-    main{
-      max-width:1100px;
-      margin:auto;
-      padding:30px 18px 60px;
-    }
+    const query = `
+[out:json][timeout:25];
+(
+  node["amenity"="place_of_worship"]["religion"="christian"]["name"~"${safe}",i](3.4,33,15,48.5);
+  way["amenity"="place_of_worship"]["religion"="christian"]["name"~"${safe}",i](3.4,33,15,48.5);
+  relation["amenity"="place_of_worship"]["religion"="christian"]["name"~"${safe}",i](3.4,33,15,48.5);
 
-    .hero{
-      text-align:center;
-      padding:30px 10px;
-    }
-    .hero h1{
-      margin:0 0 10px;
-      font-size:36px;
-      color:#5b3a20;
-    }
-    .hero p{
-      color:#666;
-      margin-bottom:24px;
-    }
+  node["historic"="monastery"]["name"~"${safe}",i](3.4,33,15,48.5);
+  way["historic"="monastery"]["name"~"${safe}",i](3.4,33,15,48.5);
+  relation["historic"="monastery"]["name"~"${safe}",i](3.4,33,15,48.5);
+);
+out center tags;
+`;
 
-    .search{
-      max-width:700px;
-      margin:auto;
-      display:flex;
-      gap:8px;
-    }
-    .search input{
-      flex:1;
-      padding:15px;
-      border:1px solid #ddd;
-      border-radius:10px;
-      font-size:16px;
-      outline:none;
-    }
-    .search button{
-      background:#5b3a20;
-      color:white;
-      padding:0 22px;
-    }
-
-    .filters{
-      display:flex;
-      justify-content:center;
-      gap:8px;
-      margin:20px 0;
-      flex-wrap:wrap;
-    }
-    .filter{
-      background:white;
-      border:1px solid #ddd;
-      color:#5b3a20;
-    }
-    .filter.active{
-      background:#5b3a20;
-      color:white;
-    }
-
-    .status{
-      text-align:center;
-      color:#777;
-      margin:20px 0;
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-      gap:18px;
-    }
-
-    .card{
-      background:white;
-      border-radius:15px;
-      padding:20px;
-      box-shadow:0 3px 14px #00000012;
-      border:1px solid #eee;
-      position:relative;
-    }
-    .card h3{
-      margin:0 0 8px;
-      color:#5b3a20;
-    }
-    .type{
-      display:inline-block;
-      background:#eee3d3;
-      color:#5b3a20;
-      border-radius:20px;
-      padding:5px 9px;
-      font-size:12px;
-      margin-bottom:10px;
-    }
-    .card p{
-      color:#666;
-      line-height:1.6;
-      margin:8px 0;
-    }
-    .fav{
-      position:absolute;
-      right:15px;
-      top:15px;
-      background:#f5f5f5;
-      font-size:18px;
-      padding:7px 10px;
-    }
-
-    section.panel{
-      display:none;
-    }
-    section.panel.active{
-      display:block;
-    }
-
-    .dashboard{
-      background:white;
-      padding:22px;
-      border-radius:15px;
-      box-shadow:0 3px 14px #0001;
-      max-width:750px;
-      margin:auto;
-    }
-    .dashboard h2{
-      color:#5b3a20;
-    }
-    .form{
-      display:grid;
-      gap:12px;
-    }
-    .form input,.form textarea,.form select{
-      width:100%;
-      padding:12px;
-      border:1px solid #ddd;
-      border-radius:8px;
-      font-size:15px;
-    }
-    .form textarea{
-      min-height:100px;
-      resize:vertical;
-    }
-    .add{
-      background:#5b3a20;
-      color:white;
-    }
-    .danger{
-      background:#eee;
-      color:#8b2b2b;
-    }
-
-    .empty{
-      text-align:center;
-      background:white;
-      padding:35px;
-      border-radius:15px;
-      color:#777;
-    }
-
-    footer{
-      text-align:center;
-      padding:25px;
-      background:#5b3a20;
-      color:white;
-      margin-top:30px;
-    }
-
-    @media(max-width:650px){
-      .header{
-        align-items:flex-start;
-        flex-direction:column;
+    const response = await fetch(
+      "https://overpass-api.de/api/interpreter",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: new URLSearchParams({ data: query })
       }
-      .hero h1{font-size:29px}
-      .search{flex-direction:column}
-      .search button{padding:13px}
-      nav{width:100%}
-      nav button{flex:1}
+    );
+
+    if (!response.ok) {
+      return res.status(502).json({
+        error: "የመረጃ አገልግሎቱ አልተገኘም።"
+      });
     }
-  </style>
-</head>
 
-<body>
+    const data = await response.json();
 
-<header>
-  <div class="header">
-    <div class="brand">
-      ✝ ቅዱስ መንገድ
-      <small>Qidus Menged</small>
-    </div>
+    const results = (data.elements || []).map((item) => {
+      const t = item.tags || {};
 
-    <nav>
-      <button onclick="showPage('home')">🏠 መነሻ</button>
-      <button onclick="showPage('places')">⛪ ቦታዎች</button>
-      <button onclick="showPage('favorites')">❤️ የተወደዱ</button>
-      <button onclick="showPage('dashboard')">⚙️ Dashboard</button>
-    </nav>
-  </div>
-</header>
+      const lat =
+        item.lat ??
+        item.center?.lat ??
+        null;
 
-<main>
+      const lon =
+        item.lon ??
+        item.center?.lon ??
+        null;
 
-  <!-- HOME -->
-  <section id="home" class="panel active">
-    <div class="hero">
-      <h1>ቅዱስ መንገድ</h1>
-      <p>የኢትዮጵያ ገዳማትና አድባራትን በቀላሉ ያግኙ</p>
+      return {
+        id: `${item.type}-${item.id}`,
 
-      <div class="search">
-        <input id="searchInput"
-               type="search"
-               placeholder="የገዳም ወይም የአድባራት ስም ይፈልጉ..."
-               oninput="searchPlaces()">
-        <button onclick="searchPlaces()">🔎 ፈልግ</button>
-      </div>
+        name:
+          t.name ||
+          t["name:am"] ||
+          t["name:en"] ||
+          "ስም ያልተገለጸ",
 
-      <div class="filters">
-        <button class="filter active" onclick="setFilter('all',this)">ሁሉንም አሳይ</button>
-        <button class="filter" onclick="setFilter('ገዳም',this)">⛪ ገዳማት</button>
-        <button class="filter" onclick="setFilter('አድባራት',this)">✝️ አድባራት</button>
-      </div>
-    </div>
+        nameAm: t["name:am"] || "",
+        nameEn: t["name:en"] || "",
 
-    <div id="status" class="status"></div>
-    <div id="placesGrid" class="grid"></div>
-  </section>
+        type:
+          t.historic === "monastery"
+            ? "ገዳም"
+            : "አድባራት",
 
+        location:
+          t["addr:city"] ||
+          t["addr:town"] ||
+          t["addr:village"] ||
+          t["addr:district"] ||
+          "ኢትዮጵያ",
 
-  <!-- PLACES -->
-  <section id="places" class="panel">
-    <div class="hero">
-      <h1>የተመዘገቡ ቦታዎች</h1>
-      <p>ገዳማትና አድባራት</p>
-    </div>
+        address:
+          [
+            t["addr:street"],
+            t["addr:place"],
+            t["addr:city"],
+            t["addr:state"]
+          ]
+            .filter(Boolean)
+            .join(", "),
 
-    <div id="placesGrid2" class="grid"></div>
-  </section>
+        description:
+          t.description ||
+          t["description:am"] ||
+          t["short_description"] ||
+          "",
 
+        phone:
+          t.phone ||
+          t["contact:phone"] ||
+          "",
 
-  <!-- FAVORITES -->
-  <section id="favorites" class="panel">
-    <div class="hero">
-      <h1>❤️ የተወደዱ</h1>
-      <p>ያስቀመጧቸው ቦታዎች</p>
-    </div>
+        website:
+          t.website ||
+          t["contact:website"] ||
+          "",
 
-    <div id="favoritesGrid" class="grid"></div>
-  </section>
+        openingHours:
+          t.opening_hours ||
+          "",
 
+        denomination:
+          t.denomination ||
+          "",
 
-  <!-- DASHBOARD -->
-  <section id="dashboard" class="panel">
-    <div class="dashboard">
-      <h2>⚙️ Dashboard</h2>
-      <p>አዲስ ገዳም ወይም አድባራት ይጨምሩ።</p>
+        lat,
+        lon,
 
-      <div class="form">
-        <input id="name" placeholder="የቦታው ስም">
-        
-        <select id="type">
-          <option value="ገዳም">ገዳም</option>
-          <option value="አድባራት">አድባራት</option>
-        </select>
-
-        <input id="location" placeholder="አካባቢ / ከተማ">
-        <input id="address" placeholder="አድራሻ">
-        <textarea id="description" placeholder="ስለ ቦታው አጭር መግለጫ"></textarea>
-
-        <button class="add" onclick="addPlace()">➕ ቦታ ጨምር</button>
-        <button class="danger" onclick="resetPlaces()">የናሙና መረጃውን መመለስ</button>
-      </div>
-
-      <p id="dashboardMessage" class="status"></p>
-    </div>
-  </section>
-
-</main>
-
-<footer>
-  ✝ ቅዱስ መንገድ — Qidus Menged
-</footer>
-
-
-<script>
-  const defaultPlaces = [
-    {
-      id:1,
-      name:"ደብረ ሊባኖስ",
-      type:"ገዳም",
-      location:"ሸዋ",
-      address:"ደብረ ሊባኖስ",
-      description:"ታሪካዊ የኢትዮጵያ ገዳም።"
-    },
-    {
-      id:2,
-      name:"ላሊበላ ቤተ ክርስቲያናት",
-      type:"አድባራት",
-      location:"ላሊበላ",
-      address:"ላሊበላ",
-      description:"ታሪካዊ የድንጋይ ቤተ ክርስቲያናት።"
-    },
-    {
-      id:3,
-      name:"ደብረ ዳሞ",
-      type:"ገዳም",
-      location:"ትግራይ",
-      address:"ደብረ ዳሞ",
-      description:"ታሪካዊ የኢትዮጵያ ገዳም።"
-    },
-    {
-      id:4,
-      name:"ቅዱስ ጊዮርጊስ",
-      type:"አድባራት",
-      location:"አዲስ አበባ",
-      address:"አዲስ አበባ",
-      description:"ታዋቂ የኢትዮጵያ ኦርቶዶክስ ቤተ ክርስቲያን።"
-    }
-  ];
-
-  let places = JSON.parse(localStorage.getItem("qidusPlaces")) || defaultPlaces;
-  let favorites = JSON.parse(localStorage.getItem("qidusFavorites")) || [];
-  let currentFilter = "all";
-
-  function save(){
-    localStorage.setItem("qidusPlaces", JSON.stringify(places));
-    localStorage.setItem("qidusFavorites", JSON.stringify(favorites));
-  }
-
-  function showPage(page){
-    document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
-    document.getElementById(page).classList.add("active");
-
-    if(page === "places") renderPlaces(places,"placesGrid2");
-    if(page === "favorites") renderFavorites();
-    if(page === "home") renderPlaces();
-  }
-
-  function setFilter(type,button){
-    currentFilter = type;
-
-    document.querySelectorAll(".filter")
-      .forEach(b => b.classList.remove("active"));
-
-    button.classList.add("active");
-
-    renderPlaces();
-  }
-
-  function searchPlaces(){
-    const q = document.getElementById("searchInput").value.trim().toLowerCase();
-
-    let result = places.filter(p => {
-      const text =
-        `${p.name} ${p.type} ${p.location} ${p.address} ${p.description}`
-        .toLowerCase();
-
-      const matchesSearch = !q || text.includes(q);
-      const matchesType =
-        currentFilter === "all" || p.type === currentFilter;
-
-      return matchesSearch && matchesType;
+        mapUrl:
+          lat !== null && lon !== null
+            ? `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=18/${lat}/${lon}`
+            : ""
+      };
     });
 
-    renderPlaces(result);
+    return res.status(200).json({
+      query: q,
+      count: results.length,
+      results
+    });
 
-    document.getElementById("status").textContent =
-      result.length + " ቦታዎች ተገኝተዋል።";
+  } catch (error) {
+    return res.status(500).json({
+      error: "ፍለጋው አልተሳካም።"
+    });
   }
-
-  function renderPlaces(list = places, target = "placesGrid"){
-    const grid = document.getElementById(target);
-    if(!grid) return;
-
-    if(!list.length){
-      grid.innerHTML = `<div class="empty">ምንም ቦታ አልተገኘም።</div>`;
-      return;
-    }
-
-    grid.innerHTML = list.map(place => card(place)).join("");
-  }
-
-  function card(place){
-    const liked = favorites.includes(place.id);
-
-    return `
-      <article class="card">
-        <button class="fav"
-                onclick="toggleFavorite(${place.id})"
-                title="Favorite">
-          ${liked ? "❤️" : "🤍"}
-        </button>
-
-        <span class="type">${place.type}</span>
-
-        <h3>${escapeHtml(place.name)}</h3>
-
-        <p><strong>📍</strong> ${escapeHtml(place.location || "")}</p>
-
-        <p>${escapeHtml(place.description || "")}</p>
-
-        <small>${escapeHtml(place.address || "")}</small>
-      </article>
-    `;
-  }
-
-  function toggleFavorite(id){
-    if(favorites.includes(id)){
-      favorites = favorites.filter(x => x !== id);
-    }else{
-      favorites.push(id);
-    }
-
-    save();
-    renderPlaces();
-    renderPlaces(places,"placesGrid2");
-    renderFavorites();
-  }
-
-  function renderFavorites(){
-    const list = places.filter(p => favorites.includes(p.id));
-    renderPlaces(list,"favoritesGrid");
-  }
-
-  function addPlace(){
-    const name = document.getElementById("name").value.trim();
-    const type = document.getElementById("type").value;
-    const location = document.getElementById("location").value.trim();
-    const address = document.getElementById("address").value.trim();
-    const description = document.getElementById("description").value.trim();
-
-    if(!name){
-      document.getElementById("dashboardMessage").textContent =
-        "⚠️ የቦታውን ስም ያስገቡ።";
-      return;
-    }
-
-    const place = {
-      id:Date.now(),
-      name,
-      type,
-      location,
-      address,
-      description
-    };
-
-    places.push(place);
-    save();
-
-    document.getElementById("name").value = "";
-    document.getElementById("location").value = "";
-    document.getElementById("address").value = "";
-    document.getElementById("description").value = "";
-
-    document.getElementById("dashboardMessage").textContent =
-      "✅ ቦታው ተጨምሯል።";
-
-    renderPlaces();
-    renderPlaces(places,"placesGrid2");
-  }
-
-  function resetPlaces(){
-    if(confirm("የናሙና መረጃውን መመለስ ይፈልጋሉ?")){
-      places = [...defaultPlaces];
-      favorites = [];
-      save();
-
-      renderPlaces();
-      renderPlaces(places,"placesGrid2");
-      renderFavorites();
-
-      document.getElementById("dashboardMessage").textContent =
-        "✅ መረጃው ተመልሷል።";
-    }
-  }
-
-  function escapeHtml(value){
-    return String(value)
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
-  }
-
-  renderPlaces();
-  renderPlaces(places,"placesGrid2");
-  renderFavorites();
-</script>
-
-</body>
-</html>
+}
