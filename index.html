@@ -3,13 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>ቅዱስ መንገድ | Qidus Menged</title>
-
-  <meta
-    name="description"
-    content="የኢትዮጵያ ዳማትና አድባራት ስም፣ አድራሻ፣ አጭር ታሪክ እና መረጃ ለማግኘት የሚያግዝ ቀላል ድህረ ገጽ።"
-  >
+  <title>ቅዱስ መንገድ</title>
 
   <style>
     * {
@@ -18,67 +12,229 @@
       padding: 0;
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
-
     body {
-      font-family:
-        Arial,
-        "Noto Sans Ethiopic",
-        "Segoe UI",
-        sans-serif;
-      background: #f5f7f5;
-      color: #18352a;
-      line-height: 1.6;
+      font-family: Arial, "Noto Sans Ethiopic", sans-serif;
+      background: #f5f7fa;
+      color: #222;
+      line-height: 1.7;
     }
 
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    button,
-    input {
-      font: inherit;
-    }
-
-    /* HEADER */
     header {
-      background: #0d3b2e;
+      background: #17365d;
       color: white;
+      padding: 22px 16px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 30px;
+      margin-bottom: 5px;
+    }
+
+    header p {
+      font-size: 15px;
+      opacity: 0.9;
+    }
+
+    nav {
+      background: white;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
       position: sticky;
       top: 0;
-      z-index: 1000;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+      z-index: 10;
     }
 
-    .nav {
-      max-width: 1150px;
+    nav button {
+      border: none;
+      background: #eef3f8;
+      color: #17365d;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    nav button:hover {
+      background: #dbe7f3;
+    }
+
+    .hero {
+      max-width: 1100px;
+      margin: 25px auto;
+      padding: 40px 20px;
+      text-align: center;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+    }
+
+    .hero h2 {
+      color: #17365d;
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+
+    .hero p {
+      max-width: 750px;
       margin: auto;
-      padding: 14px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
+      color: #555;
     }
 
-    .logo {
+    .search {
+      max-width: 700px;
+      margin: 20px auto;
       display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 800;
-      font-size: 20px;
-      white-space: nowrap;
+      gap: 8px;
     }
 
-    .logo-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background: #d4af37;
-      color: #0d3b2e;
+    .search input {
+      flex: 1;
+      padding: 13px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    .search button {
+      padding: 13px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #17365d;
+      color: white;
+      cursor: pointer;
+    }
+
+    .section {
+      max-width: 1100px;
+      margin: 25px auto;
+      padding: 20px;
+    }
+
+    .section h2 {
+      text-align: center;
+      color: #17365d;
+      margin-bottom: 20px;
+    }
+
+    .cards {
       display: grid;
-      place-items: center;
-      font-size: 22px;
-      font-weight:
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: white;
+      padding: 22px;
+      border-radius: 14px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+    }
+
+    .card h3 {
+      color: #17365d;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      color: #555;
+      font-size: 15px;
+    }
+
+    .card button {
+      margin-top: 14px;
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 7px;
+      background: #17365d;
+      color: white;
+      cursor: pointer;
+    }
+
+    .info {
+      display: none;
+      margin-top: 15px;
+      padding: 12px;
+      background: #f1f5f9;
+      border-radius: 8px;
+    }
+
+    footer {
+      margin-top: 40px;
+      padding: 25px;
+      background: #17365d;
+      color: white;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 24px;
+      }
+
+      .hero h2 {
+        font-size: 23px;
+      }
+
+      .search {
+        flex-direction: column;
+      }
+
+      .search button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>ቅዱስ መንገድ</h1>
+    <p>የመንፈሳዊ ሕይወትና የጽድቅ መንገድ</p>
+  </header>
+
+  <nav>
+    <button onclick="showSection('home')">መነሻ</button>
+    <button onclick="showSection('teachings')">አጭር ታሪክ</button>
+    <button onclick="showSection('churches')">አድባራት</button>
+    <button onclick="showSection('calendar')">የበዓላት ቀን</button>
+    <button onclick="showSection('about')">ስለ ቅዱስ መንገድ</button>
+  </nav>
+
+  <main id="home">
+
+    <section class="hero">
+      <h2>እንኳን ወደ ቅዱስ መንገድ በደህና መጡ</h2>
+      <p>
+        የመንፈሳዊ እውቀት፣ የትምህርት እና የቤተ ክርስቲያን
+        መረጃዎችን በቀላሉ ለማግኘት የተዘጋጀ መድረክ።
+      </p>
+
+      <div class="search">
+        <input id="searchInput" type="text" placeholder="የሚፈልጉትን ይፈልጉ...">
+        <button onclick="searchSite()">ፈልግ</button>
+      </div>
+    </section>
+
+    <section class="section" id="teachings">
+      <h2>የትምህርት ክፍል</h2>
+
+      <div class="cards">
+
+        <div class="card">
+          <h3>መንፈሳዊ ትምህርት</h3>
+          <p>የእምነትና የመንፈሳዊ ሕይወት ትምህርቶች።</p>
+          <button onclick="toggleInfo('info1')">ተጨማሪ ይመልከቱ</button>
+          <div class="info" id="info1">
+            ይህ ክፍል ለመንፈሳዊ ትምህርቶች ተዘጋጅቷል።
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>የቅዱሳን ታሪክ</h3>
+          <p>ስለ ቅዱሳን ሕይወትና ታ
