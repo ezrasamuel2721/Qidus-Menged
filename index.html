@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>ቅዱስ መንገድ | Qidus Menged</title>
 
 <style>
@@ -10,6 +11,10 @@
   box-sizing:border-box;
   margin:0;
   padding:0;
+}
+
+html{
+  scroll-behavior:smooth;
 }
 
 body{
@@ -89,6 +94,11 @@ nav button{
   border-radius:20px;
   white-space:nowrap;
   cursor:pointer;
+  font-weight:bold;
+}
+
+nav button:hover{
+  background:#dcebe5;
 }
 
 .container{
@@ -235,6 +245,7 @@ nav button{
   padding:35px 20px;
   border-radius:15px;
   color:#777;
+  grid-column:1/-1;
 }
 
 .dashboard{
@@ -264,6 +275,7 @@ nav button{
 
 .form-grid textarea{
   min-height:100px;
+  resize:vertical;
 }
 
 .full{
@@ -278,6 +290,73 @@ nav button{
   padding:12px 20px;
   border-radius:9px;
   cursor:pointer;
+  font-weight:bold;
+}
+
+.add-btn:hover{
+  background:#276b55;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:12px;
+  margin-bottom:20px;
+}
+
+.stat{
+  background:#f4f7f5;
+  padding:15px;
+  border-radius:12px;
+  text-align:center;
+}
+
+.stat strong{
+  display:block;
+  font-size:25px;
+  color:#173f35;
+}
+
+.stat span{
+  font-size:13px;
+  color:#666;
+}
+
+.dashboard-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:15px;
+}
+
+.dashboard-actions button{
+  border:0;
+  background:#173f35;
+  color:white;
+  padding:10px 14px;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.dashboard-actions .danger{
+  background:#a33a3a;
+}
+
+.notice{
+  display:none;
+  position:fixed;
+  left:15px;
+  right:15px;
+  bottom:20px;
+  max-width:500px;
+  margin:auto;
+  background:#173f35;
+  color:white;
+  padding:14px 18px;
+  border-radius:10px;
+  text-align:center;
+  box-shadow:0 5px 20px rgba(0,0,0,.2);
+  z-index:100;
 }
 
 footer{
@@ -288,7 +367,12 @@ footer{
   margin-top:30px;
 }
 
+footer p{
+  opacity:.9;
+}
+
 @media(max-width:600px){
+
   .logo{
     font-size:24px;
   }
@@ -304,6 +388,18 @@ footer{
 
   .card img{
     height:170px;
+  }
+
+  .details{
+    padding:18px;
+  }
+
+  nav{
+    scrollbar-width:none;
+  }
+
+  nav::-webkit-scrollbar{
+    display:none;
   }
 }
 </style>
@@ -340,8 +436,43 @@ footer{
 
 </header>
 
+
 <nav>
-  <button onclick="showAll()">ሁሉንም አሳይ</button>
-  <button onclick="filterType('ገዳም')">ገዳማት</button>
-  <button onclick="filterType('አድባራት')">አድባራት</button>
-  <button onclick="show
+
+  <button onclick="showAll()">
+    ሁሉንም አሳይ
+  </button>
+
+  <button onclick="filterType('ገዳም')">
+    ገዳማት
+  </button>
+
+  <button onclick="filterType('አድባራት')">
+    አድባራት
+  </button>
+
+  <button onclick="showFavorites()">
+    ❤️ የተወደዱ
+  </button>
+
+  <button onclick="goDashboard()">
+    ⚙️ Dashboard
+  </button>
+
+</nav>
+
+
+<main class="container">
+
+  <h2 class="section-title">
+    🔎 የፍለጋ ውጤቶች
+  </h2>
+
+  <div id="status" class="search-status">
+    የተመዘገቡ ቦታዎችን እያሳየ ነው...
+  </div>
+
+  <div id="results" class="results"></div>
+
+
+  <div id="details" class="
