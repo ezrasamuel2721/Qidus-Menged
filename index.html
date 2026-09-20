@@ -1,478 +1,545 @@
 <!DOCTYPE html>
 <html lang="am">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ቅዱስ መንገድ | Qidus Menged</title>
 
-<title>ቅዱስ መንገድ | Qidus Menged</title>
+  <style>
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial,"Noto Sans Ethiopic",sans-serif;
+      background:#f7f4ed;
+      color:#222;
+    }
+    header{
+      background:#5b3a20;
+      color:white;
+      padding:18px 20px;
+      position:sticky;
+      top:0;
+      z-index:10;
+      box-shadow:0 2px 8px #0002;
+    }
+    .header{
+      max-width:1100px;
+      margin:auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:15px;
+    }
+    .brand{
+      font-size:25px;
+      font-weight:bold;
+    }
+    .brand small{
+      display:block;
+      font-size:12px;
+      opacity:.8;
+      margin-top:3px;
+    }
+    nav{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    button{
+      border:0;
+      border-radius:9px;
+      padding:10px 14px;
+      cursor:pointer;
+      font-size:14px;
+    }
+    nav button{
+      background:#ffffff18;
+      color:white;
+    }
+    nav button:hover{background:#ffffff30}
 
-<style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
+    main{
+      max-width:1100px;
+      margin:auto;
+      padding:30px 18px 60px;
+    }
 
-html{
-  scroll-behavior:smooth;
-}
+    .hero{
+      text-align:center;
+      padding:30px 10px;
+    }
+    .hero h1{
+      margin:0 0 10px;
+      font-size:36px;
+      color:#5b3a20;
+    }
+    .hero p{
+      color:#666;
+      margin-bottom:24px;
+    }
 
-body{
-  font-family:Arial,"Noto Sans Ethiopic",sans-serif;
-  background:#f5f7f9;
-  color:#222;
-  line-height:1.7;
-}
+    .search{
+      max-width:700px;
+      margin:auto;
+      display:flex;
+      gap:8px;
+    }
+    .search input{
+      flex:1;
+      padding:15px;
+      border:1px solid #ddd;
+      border-radius:10px;
+      font-size:16px;
+      outline:none;
+    }
+    .search button{
+      background:#5b3a20;
+      color:white;
+      padding:0 22px;
+    }
 
-header{
-  background:linear-gradient(135deg,#173f35,#276b55);
-  color:white;
-  padding:22px 15px 30px;
-  text-align:center;
-}
+    .filters{
+      display:flex;
+      justify-content:center;
+      gap:8px;
+      margin:20px 0;
+      flex-wrap:wrap;
+    }
+    .filter{
+      background:white;
+      border:1px solid #ddd;
+      color:#5b3a20;
+    }
+    .filter.active{
+      background:#5b3a20;
+      color:white;
+    }
 
-.logo{
-  font-size:30px;
-  font-weight:bold;
-}
+    .status{
+      text-align:center;
+      color:#777;
+      margin:20px 0;
+    }
 
-.subtitle{
-  margin-top:5px;
-  opacity:.9;
-}
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:18px;
+    }
 
-.search-area{
-  max-width:850px;
-  margin:22px auto 0;
-}
+    .card{
+      background:white;
+      border-radius:15px;
+      padding:20px;
+      box-shadow:0 3px 14px #00000012;
+      border:1px solid #eee;
+      position:relative;
+    }
+    .card h3{
+      margin:0 0 8px;
+      color:#5b3a20;
+    }
+    .type{
+      display:inline-block;
+      background:#eee3d3;
+      color:#5b3a20;
+      border-radius:20px;
+      padding:5px 9px;
+      font-size:12px;
+      margin-bottom:10px;
+    }
+    .card p{
+      color:#666;
+      line-height:1.6;
+      margin:8px 0;
+    }
+    .fav{
+      position:absolute;
+      right:15px;
+      top:15px;
+      background:#f5f5f5;
+      font-size:18px;
+      padding:7px 10px;
+    }
 
-.search-box{
-  display:flex;
-  background:white;
-  border-radius:14px;
-  padding:6px;
-  box-shadow:0 5px 20px rgba(0,0,0,.15);
-}
+    section.panel{
+      display:none;
+    }
+    section.panel.active{
+      display:block;
+    }
 
-.search-box input{
-  flex:1;
-  border:0;
-  outline:none;
-  padding:14px;
-  font-size:16px;
-  color:#222;
-}
+    .dashboard{
+      background:white;
+      padding:22px;
+      border-radius:15px;
+      box-shadow:0 3px 14px #0001;
+      max-width:750px;
+      margin:auto;
+    }
+    .dashboard h2{
+      color:#5b3a20;
+    }
+    .form{
+      display:grid;
+      gap:12px;
+    }
+    .form input,.form textarea,.form select{
+      width:100%;
+      padding:12px;
+      border:1px solid #ddd;
+      border-radius:8px;
+      font-size:15px;
+    }
+    .form textarea{
+      min-height:100px;
+      resize:vertical;
+    }
+    .add{
+      background:#5b3a20;
+      color:white;
+    }
+    .danger{
+      background:#eee;
+      color:#8b2b2b;
+    }
 
-.search-box button{
-  border:0;
-  border-radius:10px;
-  padding:0 22px;
-  background:#d99b2b;
-  color:white;
-  font-size:16px;
-  font-weight:bold;
-  cursor:pointer;
-}
+    .empty{
+      text-align:center;
+      background:white;
+      padding:35px;
+      border-radius:15px;
+      color:#777;
+    }
 
-nav{
-  background:white;
-  display:flex;
-  gap:8px;
-  padding:10px;
-  overflow-x:auto;
-  position:sticky;
-  top:0;
-  z-index:10;
-  box-shadow:0 2px 8px rgba(0,0,0,.08);
-}
+    footer{
+      text-align:center;
+      padding:25px;
+      background:#5b3a20;
+      color:white;
+      margin-top:30px;
+    }
 
-nav button{
-  border:0;
-  background:#eef3f1;
-  color:#173f35;
-  padding:10px 14px;
-  border-radius:20px;
-  white-space:nowrap;
-  cursor:pointer;
-  font-weight:bold;
-}
-
-nav button:hover{
-  background:#dcebe5;
-}
-
-.container{
-  max-width:1100px;
-  margin:auto;
-  padding:25px 15px 50px;
-}
-
-.section-title{
-  margin-bottom:15px;
-  color:#173f35;
-}
-
-.search-status{
-  background:white;
-  padding:15px;
-  border-radius:12px;
-  margin-bottom:18px;
-  box-shadow:0 2px 8px rgba(0,0,0,.06);
-}
-
-.results{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-  gap:18px;
-}
-
-.card{
-  background:white;
-  border-radius:16px;
-  overflow:hidden;
-  box-shadow:0 3px 12px rgba(0,0,0,.08);
-  transition:.2s;
-}
-
-.card:hover{
-  transform:translateY(-3px);
-  box-shadow:0 8px 22px rgba(0,0,0,.12);
-}
-
-.card img{
-  width:100%;
-  height:190px;
-  object-fit:cover;
-  background:#ddd;
-}
-
-.card-content{
-  padding:17px;
-}
-
-.type{
-  display:inline-block;
-  background:#e9f3ee;
-  color:#176044;
-  border-radius:20px;
-  padding:4px 10px;
-  font-size:13px;
-  margin-bottom:8px;
-}
-
-.card h3{
-  color:#173f35;
-  margin-bottom:5px;
-}
-
-.location{
-  color:#666;
-  font-size:14px;
-  margin-bottom:10px;
-}
-
-.description{
-  font-size:14px;
-  color:#555;
-}
-
-.actions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:7px;
-  margin-top:14px;
-}
-
-.actions button,
-.actions a{
-  border:0;
-  text-decoration:none;
-  background:#173f35;
-  color:white;
-  padding:8px 11px;
-  border-radius:8px;
-  cursor:pointer;
-  font-size:13px;
-}
-
-.actions .favorite{
-  background:#d99b2b;
-}
-
-.details{
-  display:none;
-  background:white;
-  padding:25px;
-  border-radius:16px;
-  margin-top:25px;
-  box-shadow:0 3px 15px rgba(0,0,0,.1);
-}
-
-.details img{
-  width:100%;
-  max-height:400px;
-  object-fit:cover;
-  border-radius:12px;
-  margin:15px 0;
-}
-
-.details h2{
-  color:#173f35;
-  margin-bottom:8px;
-}
-
-.detail-row{
-  margin:8px 0;
-}
-
-.detail-label{
-  font-weight:bold;
-  color:#173f35;
-}
-
-.close-btn{
-  float:right;
-  border:0;
-  background:#eee;
-  padding:7px 12px;
-  border-radius:7px;
-  cursor:pointer;
-}
-
-.empty{
-  text-align:center;
-  background:white;
-  padding:35px 20px;
-  border-radius:15px;
-  color:#777;
-  grid-column:1/-1;
-}
-
-.dashboard{
-  margin-top:30px;
-  background:white;
-  padding:22px;
-  border-radius:16px;
-  box-shadow:0 3px 12px rgba(0,0,0,.07);
-}
-
-.form-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:12px;
-  margin-top:15px;
-}
-
-.form-grid input,
-.form-grid textarea,
-.form-grid select{
-  width:100%;
-  padding:11px;
-  border:1px solid #ddd;
-  border-radius:8px;
-  font-size:14px;
-}
-
-.form-grid textarea{
-  min-height:100px;
-  resize:vertical;
-}
-
-.full{
-  grid-column:1/-1;
-}
-
-.add-btn{
-  margin-top:15px;
-  background:#173f35;
-  color:white;
-  border:0;
-  padding:12px 20px;
-  border-radius:9px;
-  cursor:pointer;
-  font-weight:bold;
-}
-
-.add-btn:hover{
-  background:#276b55;
-}
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-  gap:12px;
-  margin-bottom:20px;
-}
-
-.stat{
-  background:#f4f7f5;
-  padding:15px;
-  border-radius:12px;
-  text-align:center;
-}
-
-.stat strong{
-  display:block;
-  font-size:25px;
-  color:#173f35;
-}
-
-.stat span{
-  font-size:13px;
-  color:#666;
-}
-
-.dashboard-actions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-top:15px;
-}
-
-.dashboard-actions button{
-  border:0;
-  background:#173f35;
-  color:white;
-  padding:10px 14px;
-  border-radius:8px;
-  cursor:pointer;
-}
-
-.dashboard-actions .danger{
-  background:#a33a3a;
-}
-
-.notice{
-  display:none;
-  position:fixed;
-  left:15px;
-  right:15px;
-  bottom:20px;
-  max-width:500px;
-  margin:auto;
-  background:#173f35;
-  color:white;
-  padding:14px 18px;
-  border-radius:10px;
-  text-align:center;
-  box-shadow:0 5px 20px rgba(0,0,0,.2);
-  z-index:100;
-}
-
-footer{
-  background:#173f35;
-  color:white;
-  text-align:center;
-  padding:25px 15px;
-  margin-top:30px;
-}
-
-footer p{
-  opacity:.9;
-}
-
-@media(max-width:600px){
-
-  .logo{
-    font-size:24px;
-  }
-
-  .search-box{
-    flex-direction:column;
-    gap:5px;
-  }
-
-  .search-box button{
-    padding:12px;
-  }
-
-  .card img{
-    height:170px;
-  }
-
-  .details{
-    padding:18px;
-  }
-
-  nav{
-    scrollbar-width:none;
-  }
-
-  nav::-webkit-scrollbar{
-    display:none;
-  }
-}
-</style>
+    @media(max-width:650px){
+      .header{
+        align-items:flex-start;
+        flex-direction:column;
+      }
+      .hero h1{font-size:29px}
+      .search{flex-direction:column}
+      .search button{padding:13px}
+      nav{width:100%}
+      nav button{flex:1}
+    }
+  </style>
 </head>
 
 <body>
 
 <header>
-
-  <div class="logo">✝ ቅዱስ መንገድ</div>
-
-  <div class="subtitle">
-    የገዳማትና የአድባራት መረጃ መፈለጊያ
-  </div>
-
-  <div class="search-area">
-
-    <div class="search-box">
-
-      <input
-        id="searchInput"
-        type="text"
-        placeholder="ገዳማትንና አድባራትን ፈልግ..."
-        onkeydown="if(event.key==='Enter') searchPlaces()"
-      >
-
-      <button onclick="searchPlaces()">
-        🔎 ፈልግ
-      </button>
-
+  <div class="header">
+    <div class="brand">
+      ✝ ቅዱስ መንገድ
+      <small>Qidus Menged</small>
     </div>
 
+    <nav>
+      <button onclick="showPage('home')">🏠 መነሻ</button>
+      <button onclick="showPage('places')">⛪ ቦታዎች</button>
+      <button onclick="showPage('favorites')">❤️ የተወደዱ</button>
+      <button onclick="showPage('dashboard')">⚙️ Dashboard</button>
+    </nav>
   </div>
-
 </header>
 
+<main>
 
-<nav>
+  <!-- HOME -->
+  <section id="home" class="panel active">
+    <div class="hero">
+      <h1>ቅዱስ መንገድ</h1>
+      <p>የኢትዮጵያ ገዳማትና አድባራትን በቀላሉ ያግኙ</p>
 
-  <button onclick="showAll()">
-    ሁሉንም አሳይ
-  </button>
+      <div class="search">
+        <input id="searchInput"
+               type="search"
+               placeholder="የገዳም ወይም የአድባራት ስም ይፈልጉ..."
+               oninput="searchPlaces()">
+        <button onclick="searchPlaces()">🔎 ፈልግ</button>
+      </div>
 
-  <button onclick="filterType('ገዳም')">
-    ገዳማት
-  </button>
+      <div class="filters">
+        <button class="filter active" onclick="setFilter('all',this)">ሁሉንም አሳይ</button>
+        <button class="filter" onclick="setFilter('ገዳም',this)">⛪ ገዳማት</button>
+        <button class="filter" onclick="setFilter('አድባራት',this)">✝️ አድባራት</button>
+      </div>
+    </div>
 
-  <button onclick="filterType('አድባራት')">
-    አድባራት
-  </button>
-
-  <button onclick="showFavorites()">
-    ❤️ የተወደዱ
-  </button>
-
-  <button onclick="goDashboard()">
-    ⚙️ Dashboard
-  </button>
-
-</nav>
-
-
-<main class="container">
-
-  <h2 class="section-title">
-    🔎 የፍለጋ ውጤቶች
-  </h2>
-
-  <div id="status" class="search-status">
-    የተመዘገቡ ቦታዎችን እያሳየ ነው...
-  </div>
-
-  <div id="results" class="results"></div>
+    <div id="status" class="status"></div>
+    <div id="placesGrid" class="grid"></div>
+  </section>
 
 
-  <div id="details" class="
+  <!-- PLACES -->
+  <section id="places" class="panel">
+    <div class="hero">
+      <h1>የተመዘገቡ ቦታዎች</h1>
+      <p>ገዳማትና አድባራት</p>
+    </div>
+
+    <div id="placesGrid2" class="grid"></div>
+  </section>
+
+
+  <!-- FAVORITES -->
+  <section id="favorites" class="panel">
+    <div class="hero">
+      <h1>❤️ የተወደዱ</h1>
+      <p>ያስቀመጧቸው ቦታዎች</p>
+    </div>
+
+    <div id="favoritesGrid" class="grid"></div>
+  </section>
+
+
+  <!-- DASHBOARD -->
+  <section id="dashboard" class="panel">
+    <div class="dashboard">
+      <h2>⚙️ Dashboard</h2>
+      <p>አዲስ ገዳም ወይም አድባራት ይጨምሩ።</p>
+
+      <div class="form">
+        <input id="name" placeholder="የቦታው ስም">
+        
+        <select id="type">
+          <option value="ገዳም">ገዳም</option>
+          <option value="አድባራት">አድባራት</option>
+        </select>
+
+        <input id="location" placeholder="አካባቢ / ከተማ">
+        <input id="address" placeholder="አድራሻ">
+        <textarea id="description" placeholder="ስለ ቦታው አጭር መግለጫ"></textarea>
+
+        <button class="add" onclick="addPlace()">➕ ቦታ ጨምር</button>
+        <button class="danger" onclick="resetPlaces()">የናሙና መረጃውን መመለስ</button>
+      </div>
+
+      <p id="dashboardMessage" class="status"></p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  ✝ ቅዱስ መንገድ — Qidus Menged
+</footer>
+
+
+<script>
+  const defaultPlaces = [
+    {
+      id:1,
+      name:"ደብረ ሊባኖስ",
+      type:"ገዳም",
+      location:"ሸዋ",
+      address:"ደብረ ሊባኖስ",
+      description:"ታሪካዊ የኢትዮጵያ ገዳም።"
+    },
+    {
+      id:2,
+      name:"ላሊበላ ቤተ ክርስቲያናት",
+      type:"አድባራት",
+      location:"ላሊበላ",
+      address:"ላሊበላ",
+      description:"ታሪካዊ የድንጋይ ቤተ ክርስቲያናት።"
+    },
+    {
+      id:3,
+      name:"ደብረ ዳሞ",
+      type:"ገዳም",
+      location:"ትግራይ",
+      address:"ደብረ ዳሞ",
+      description:"ታሪካዊ የኢትዮጵያ ገዳም።"
+    },
+    {
+      id:4,
+      name:"ቅዱስ ጊዮርጊስ",
+      type:"አድባራት",
+      location:"አዲስ አበባ",
+      address:"አዲስ አበባ",
+      description:"ታዋቂ የኢትዮጵያ ኦርቶዶክስ ቤተ ክርስቲያን።"
+    }
+  ];
+
+  let places = JSON.parse(localStorage.getItem("qidusPlaces")) || defaultPlaces;
+  let favorites = JSON.parse(localStorage.getItem("qidusFavorites")) || [];
+  let currentFilter = "all";
+
+  function save(){
+    localStorage.setItem("qidusPlaces", JSON.stringify(places));
+    localStorage.setItem("qidusFavorites", JSON.stringify(favorites));
+  }
+
+  function showPage(page){
+    document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+    document.getElementById(page).classList.add("active");
+
+    if(page === "places") renderPlaces(places,"placesGrid2");
+    if(page === "favorites") renderFavorites();
+    if(page === "home") renderPlaces();
+  }
+
+  function setFilter(type,button){
+    currentFilter = type;
+
+    document.querySelectorAll(".filter")
+      .forEach(b => b.classList.remove("active"));
+
+    button.classList.add("active");
+
+    renderPlaces();
+  }
+
+  function searchPlaces(){
+    const q = document.getElementById("searchInput").value.trim().toLowerCase();
+
+    let result = places.filter(p => {
+      const text =
+        `${p.name} ${p.type} ${p.location} ${p.address} ${p.description}`
+        .toLowerCase();
+
+      const matchesSearch = !q || text.includes(q);
+      const matchesType =
+        currentFilter === "all" || p.type === currentFilter;
+
+      return matchesSearch && matchesType;
+    });
+
+    renderPlaces(result);
+
+    document.getElementById("status").textContent =
+      result.length + " ቦታዎች ተገኝተዋል።";
+  }
+
+  function renderPlaces(list = places, target = "placesGrid"){
+    const grid = document.getElementById(target);
+    if(!grid) return;
+
+    if(!list.length){
+      grid.innerHTML = `<div class="empty">ምንም ቦታ አልተገኘም።</div>`;
+      return;
+    }
+
+    grid.innerHTML = list.map(place => card(place)).join("");
+  }
+
+  function card(place){
+    const liked = favorites.includes(place.id);
+
+    return `
+      <article class="card">
+        <button class="fav"
+                onclick="toggleFavorite(${place.id})"
+                title="Favorite">
+          ${liked ? "❤️" : "🤍"}
+        </button>
+
+        <span class="type">${place.type}</span>
+
+        <h3>${escapeHtml(place.name)}</h3>
+
+        <p><strong>📍</strong> ${escapeHtml(place.location || "")}</p>
+
+        <p>${escapeHtml(place.description || "")}</p>
+
+        <small>${escapeHtml(place.address || "")}</small>
+      </article>
+    `;
+  }
+
+  function toggleFavorite(id){
+    if(favorites.includes(id)){
+      favorites = favorites.filter(x => x !== id);
+    }else{
+      favorites.push(id);
+    }
+
+    save();
+    renderPlaces();
+    renderPlaces(places,"placesGrid2");
+    renderFavorites();
+  }
+
+  function renderFavorites(){
+    const list = places.filter(p => favorites.includes(p.id));
+    renderPlaces(list,"favoritesGrid");
+  }
+
+  function addPlace(){
+    const name = document.getElementById("name").value.trim();
+    const type = document.getElementById("type").value;
+    const location = document.getElementById("location").value.trim();
+    const address = document.getElementById("address").value.trim();
+    const description = document.getElementById("description").value.trim();
+
+    if(!name){
+      document.getElementById("dashboardMessage").textContent =
+        "⚠️ የቦታውን ስም ያስገቡ።";
+      return;
+    }
+
+    const place = {
+      id:Date.now(),
+      name,
+      type,
+      location,
+      address,
+      description
+    };
+
+    places.push(place);
+    save();
+
+    document.getElementById("name").value = "";
+    document.getElementById("location").value = "";
+    document.getElementById("address").value = "";
+    document.getElementById("description").value = "";
+
+    document.getElementById("dashboardMessage").textContent =
+      "✅ ቦታው ተጨምሯል።";
+
+    renderPlaces();
+    renderPlaces(places,"placesGrid2");
+  }
+
+  function resetPlaces(){
+    if(confirm("የናሙና መረጃውን መመለስ ይፈልጋሉ?")){
+      places = [...defaultPlaces];
+      favorites = [];
+      save();
+
+      renderPlaces();
+      renderPlaces(places,"placesGrid2");
+      renderFavorites();
+
+      document.getElementById("dashboardMessage").textContent =
+        "✅ መረጃው ተመልሷል።";
+    }
+  }
+
+  function escapeHtml(value){
+    return String(value)
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  renderPlaces();
+  renderPlaces(places,"placesGrid2");
+  renderFavorites();
+</script>
+
+</body>
+</html>
