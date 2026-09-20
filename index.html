@@ -1,138 +1,250 @@
 <!DOCTYPE html>
 <html lang="am">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ቅዱስ መንገድ | Qidus Menged</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ቅዱስ መንገድ | Qidus Menged</title>
 
-  <style>
-    *{box-sizing:border-box}
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,"Noto Sans Ethiopic",sans-serif;background:#f7f3eb;color:#2d2118}
+header{background:#5b351c;color:white;padding:15px}
+.head{max-width:1100px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:15px}
+.logo{font-size:24px;font-weight:bold}
+.logo small{display:block;font-size:11px}
+nav{display:flex;gap:6px;flex-wrap:wrap}
+nav button{border:0;background:#ffffff20;color:white;padding:9px 12px;border-radius:8px;cursor:pointer}
+main{max-width:1100px;margin:auto;padding:25px 15px}
+.hero{text-align:center;padding:35px 5px}
+h1{font-size:40px;color:#5b351c;margin:0 0 10px}
+h2{color:#5b351c}
+.search{max-width:700px;margin:20px auto;display:flex;gap:8px}
+.search input{flex:1;padding:14px;border:1px solid #ccc;border-radius:9px;font-size:16px}
+button{cursor:pointer}
+.search button,.save{background:#6b4022;color:white;border:0;border-radius:9px;padding:12px 18px}
+.filters{text-align:center;margin:20px}
+.filter{background:white;color:#6b4022;border:1px solid #d5c5b2;border-radius:20px;padding:8px 15px;margin:3px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.card{background:white;border:1px solid #e2d7c8;border-radius:14px;padding:18px;box-shadow:0 3px 12px #0001}
+.card h3{color:#5b351c;margin-bottom:5px}
+.tag{display:inline-block;background:#eee0cc;padding:4px 9px;border-radius:15px;font-size:12px}
+.muted{color:#777;font-size:14px}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:15px}
+.actions button{background:#6b4022;color:white;border:0;border-radius:7px;padding:8px 11px}
+.status{text-align:center;color:#777;margin:15px}
+.empty{text-align:center;background:white;padding:35px;border-radius:12px}
+.panel{display:none}
+.panel.active{display:block}
+.form{max-width:600px;margin:auto;background:white;padding:20px;border-radius:14px}
+.form input,.form textarea,.form select{width:100%;padding:11px;margin:6px 0 12px;border:1px solid #ccc;border-radius:8px}
+.form textarea{min-height:90px}
+footer{text-align:center;color:#777;padding:30px}
+@media(max-width:650px){
+.head{flex-direction:column}
+.search{flex-direction:column}
+}
+</style>
+</head>
 
-    body{
-      margin:0;
-      font-family:Arial,"Noto Sans Ethiopic",sans-serif;
-      background:#f7f4ed;
-      color:#222;
-    }
+<body>
 
-    header{
-      background:#5b3a20;
-      color:#fff;
-      padding:18px 20px;
-      position:sticky;
-      top:0;
-      z-index:10;
-      box-shadow:0 2px 8px #0002;
-    }
+<header>
+<div class="head">
+<div class="logo">
+ቅዱስ መንገድ
+<small>Qidus Menged</small>
+</div>
 
-    .header{
-      max-width:1100px;
-      margin:auto;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:15px;
-    }
+<nav>
+<button onclick="show('home')">መነሻ</button>
+<button onclick="show('places')">ገዳማትና አድባራት</button>
+<button onclick="show('favorites')">ተወዳጆች</button>
+<button onclick="show('dashboard')">Dashboard</button>
+</nav>
+</div>
+</header>
 
-    .brand{
-      font-size:25px;
-      font-weight:bold;
-    }
+<main>
 
-    .brand small{
-      display:block;
-      font-size:12px;
-      opacity:.8;
-      margin-top:3px;
-    }
+<section id="home" class="panel active">
+<div class="hero">
+<h1>ቅዱስ መንገድ</h1>
+<p>የኢትዮጵያ ገዳማትና አድባራትን ይፈልጉ</p>
 
-    nav{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-    }
+<div class="search">
+<input id="q" placeholder="ለምሳሌ፦ ላሊበላ፣ ደብረ ሊባኖስ...">
+<button onclick="search()">🔎 ፈልግ</button>
+</div>
+</div>
 
-    button{
-      border:0;
-      border-radius:9px;
-      padding:10px 14px;
-      cursor:pointer;
-      font-size:14px;
-    }
+<div class="filters">
+<button class="filter" onclick="filterPlaces('all')">ሁሉም</button>
+<button class="filter" onclick="filterPlaces('ገዳም')">ገዳማት</button>
+<button class="filter" onclick="filterPlaces('አድባራት')">አድባራት</button>
+</div>
 
-    nav button{
-      background:#ffffff18;
-      color:#fff;
-    }
+<div id="status" class="status"></div>
+<div id="results" class="grid"></div>
+</section>
 
-    nav button:hover{
-      background:#ffffff30;
-    }
+<section id="places" class="panel">
+<h2>ገዳማትና አድባራት</h2>
+<div class="search">
+<input id="q2" placeholder="የቦታ ስም">
+<button onclick="search2()">ፈልግ</button>
+</div>
+<div id="placesResults" class="grid"></div>
+</section>
 
-    main{
-      max-width:1100px;
-      margin:auto;
-      padding:30px 18px 60px;
-    }
+<section id="favorites" class="panel">
+<h2>❤️ ተወዳጆች</h2>
+<div id="favResults" class="grid"></div>
+</section>
 
-    .panel{
-      display:none;
-    }
+<section id="dashboard" class="panel">
+<h2>Dashboard</h2>
 
-    .panel.active{
-      display:block;
-    }
+<div class="form">
+<input id="name" placeholder="የገዳም/አድባራት ስም">
 
-    .hero{
-      text-align:center;
-      padding:30px 10px;
-    }
+<select id="type">
+<option value="ገዳም">ገዳም</option>
+<option value="አድባራት">አድባራት</option>
+</select>
 
-    .hero h1{
-      margin:0 0 10px;
-      font-size:36px;
-      color:#5b3a20;
-    }
+<input id="location" placeholder="አካባቢ">
 
-    .hero p{
-      color:#666;
-      margin-bottom:24px;
-    }
+<textarea id="description" placeholder="መግለጫ"></textarea>
 
-    .search{
-      max-width:700px;
-      margin:auto;
-      display:flex;
-      gap:8px;
-    }
+<button class="save" onclick="addPlace()">መረጃ ጨምር</button>
+</div>
 
-    .search input{
-      flex:1;
-      padding:15px;
-      border:1px solid #ddd;
-      border-radius:10px;
-      font-size:16px;
-      outline:none;
-    }
+<div id="added" class="grid"></div>
+</section>
 
-    .search button{
-      background:#5b3a20;
-      color:#fff;
-      padding:0 22px;
-    }
+</main>
 
-    .filters{
-      display:flex;
-      justify-content:center;
-      gap:8px;
-      margin:20px 0;
-      flex-wrap:wrap;
-    }
+<footer>
+© 2026 ቅዱስ መንገድ — Qidus Menged
+</footer>
 
-    .filter{
-      background:#fff;
-      border:1px solid #ddd;
-      color:#5b3a20;
-    }
+<script>
 
-    .filter
+const defaults=[
+{
+id:"1",
+name:"ደብረ ሊባኖስ",
+type:"ገዳም",
+location:"ኦሮሚያ",
+description:"ታሪካዊ የኢትዮጵያ ገዳም።"
+},
+{
+id:"2",
+name:"ደብረ ዳሞ",
+type:"ገዳም",
+location:"ትግራይ",
+description:"ታሪካዊ ገዳም በኢትዮጵያ።"
+},
+{
+id:"3",
+name:"ላሊበላ",
+type:"አድባራት",
+location:"አማራ",
+description:"ታሪካዊ የድንጋይ ቤተ ክርስቲያናት።"
+},
+{
+id:"4",
+name:"አክሱም ጽዮን",
+type:"አድባራት",
+location:"አክሱም",
+description:"ታሪካዊ ቅዱስ ስፍራ።"
+}
+];
+
+let custom=JSON.parse(localStorage.getItem("qidusPlaces")||"[]");
+let places=[...custom,...defaults];
+let favorites=JSON.parse(localStorage.getItem("qidusFavorites")||"[]");
+let currentFilter="all";
+
+function show(id){
+document.querySelectorAll(".panel").forEach(x=>x.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+if(id==="favorites")renderFavorites();
+if(id==="dashboard")renderAdded();
+}
+
+function esc(x){
+return String(x||"").replace(/[&<>"']/g,m=>({
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#39;"
+}[m]));
+}
+
+function card(p){
+let fav=favorites.includes(p.id);
+
+return `
+<div class="card">
+<span class="tag">${esc(p.type)}</span>
+<h3>${esc(p.name)}</h3>
+<p>📍 ${esc(p.location)}</p>
+<p class="muted">${esc(p.description)}</p>
+
+<div class="actions">
+
+<button onclick="toggleFav('${esc(p.id)}')">
+${fav?"❤️ ተወዳጅ":"♡ ተወዳጅ"}
+</button>
+
+</div>
+</div>
+`;
+}
+
+function render(list=places){
+let data=list.filter(x=>currentFilter==="all"||x.type===currentFilter);
+
+document.getElementById("results").innerHTML=
+data.length
+?data.map(card).join("")
+:`<div class="empty">ምንም ውጤት የለም።</div>`;
+}
+
+function filterPlaces(type){
+currentFilter=type;
+render();
+}
+
+async function search(){
+
+let q=document.getElementById("q").value.trim();
+let status=document.getElementById("status");
+
+if(!q){
+status.textContent="የፍለጋ ቃል ያስገቡ።";
+render();
+return;
+}
+
+status.textContent="🔎 በመፈለግ ላይ...";
+
+try{
+
+let response=await fetch("/api/search?q="+encodeURIComponent(q));
+
+if(!response.ok)throw new Error();
+
+let data=await response.json();
+
+places=data.results||[];
+
+status.textContent=places.length+" ውጤት ተገኝቷል።";
+
+render();
+
+}catch(e){
+
+places=[
